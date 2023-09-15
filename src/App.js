@@ -1,84 +1,43 @@
-import React, { useState, useEffect } from "react";
-import { googleLogout, useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
+import { UserContext, UserState } from "./Contexts/UserContext";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Navbar from "./Widgets/Navbar";
+import { useContext, useState } from "react";
+import LoginPage from "./Scenes/LoginPage";
+import Homepage from "./Scenes/Homepage";
+import ChatRoom from "./Scenes/ChatRoom";
+import WeatherRoom from "./Scenes/WeatherRoom";
+import { MessageState } from "./Contexts/MessageContext";
 
 function App() {
-  const [user, setUser] = useState([]);
-  const [profile, setProfile] = useState([]);
-
-  const login = useGoogleLogin({
-    onSuccess: (codeResponse) => setUser(codeResponse),
-    onError: (error) => console.log("Login Failed:", error),
-  });
-
-  useEffect(() => {
-    if (user) {
-      axios
-        .get(
-          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.access_token}`,
-              Accept: "application/json",
-            },
-          }
-        )
-        .then(async (res) => {
-          setProfile(res.data);
-          const url = "http://localhost:3001";
-          const response = await fetch(`${url}/user`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(res.data),
-          });
-          const json = await response.json();
-          console.log(json);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [user]);
-
-  const logOut = () => {
-    googleLogout();
-    setProfile(null);
-  };
-
-  const sendUser = async () => {
-    const url = "http://localhost:3001";
-    const response = await fetch(`${url}/user`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(profile),
-    });
-    const json = await response.json();
-    console.log(json);
-  };
-
+  const token = localStorage.getItem("token");
   return (
-    <div>
-      <h2>React Google Login</h2>
-      <br />
-      <br />
-      {profile ? (
-        <div>
-          <img src={profile.picture} alt="user" />
-          <h3>User Logged in</h3>
-          <p>Name: {profile.name}</p>
-          <p>Email Address: {profile.email}</p>
-          <br />
-          <br />
-          <button onClick={logOut}>Log out</button>
-          <button onClick={sendUser}>Send</button>
-          <button onClick={() => console.log(profile)}>profile</button>
-        </div>
-      ) : (
-        <button onClick={() => login()}>Sign in with Google 🚀 </button>
-      )}
-    </div>
+    <>
+      <BrowserRouter>
+        <UserState>
+          <MessageState>
+            <Navbar />
+            <Routes>
+              <Route exact path="/login" element={<LoginPage />} />
+              <Route
+                exact
+                path="/"
+                element={token !== undefined ? <Homepage /> : <Navigate to={"/login"} />}
+              />
+              <Route
+                exact
+                path="/chat"
+                element={token !== undefined ? <ChatRoom /> : <Navigate to={"/login"} />}
+              />
+              <Route
+                exact
+                path="/weather"
+                element={token !== undefined ? <WeatherRoom /> : <Navigate to={"/login"} />}
+              />
+            </Routes>
+          </MessageState>
+        </UserState>
+      </BrowserRouter>
+    </>
   );
 }
 
