@@ -8,9 +8,11 @@ const BaseUrl=process.env.REACT_APP_BASE_URL
 export const UserContext = createContext()
 
 export const UserState = (props) => {
-  const [user, setUser]=useState(null)
   const [onlineUsers, setOnlineUsers]=useState([])
+  const [allUsers, setAllUsers]=useState([])
   const [notifications, setNotifications] = useState([]);
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
   const socket=useRef()
   const navigate = useNavigate();
 
@@ -23,14 +25,6 @@ export const UserState = (props) => {
       });
     }
   },[user])
-
-  useEffect(()=>{
-    if(socket.current){
-      socket.current.on("online-users",(data)=>{
-        setOnlineUsers(data)
-      });
-    }
-  },[])
 
   const registerUser =async (input) => {
     const response=await fetch(`${BaseUrl}/auth/register`,{
@@ -62,8 +56,8 @@ export const UserState = (props) => {
     const data=await response.json()
     console.log(data)
     if(response.status===200){
-    setUser(data.user)
     localStorage.setItem('token',data.token)
+    localStorage.setItem('user',JSON.stringify(data.user))
     navigate('/')
     setNotifications((prev) => [
       ...prev,
@@ -78,13 +72,23 @@ export const UserState = (props) => {
   };
 
   const logOut=()=>{
-    setUser(null)
+    localStorage.removeItem('user')
     localStorage.removeItem('token')
     setNotifications((prev) => [
       ...prev,
       { reason: "Logged out successfully!", id: uuidv4() },
     ]);
   }
+
+  const getAllUsers = async () => {
+    const response = await fetch(`${BaseUrl}/users/${user._id}/getallusers`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    const exceptMe=data.filter((obj)=>obj._id !== user._id)
+    setAllUsers(exceptMe)
+  };
 
   const deleteNotification = (id) => {
     setNotifications((prev) =>
@@ -93,7 +97,7 @@ export const UserState = (props) => {
   };
 
   return (
-    <UserContext.Provider value={{ socket, user, registerUser, login, logOut, notifications, setNotifications, deleteNotification }}>
+    <UserContext.Provider value={{ socket, user, token, registerUser, login, logOut, getAllUsers, notifications, setNotifications, deleteNotification, onlineUsers, setOnlineUsers, allUsers }}>
       {props.children}
     </UserContext.Provider>
   )
