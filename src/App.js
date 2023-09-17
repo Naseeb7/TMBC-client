@@ -16,17 +16,17 @@ function App() {
         <UserState>
           <MessageState>
             <WeatherState>
-              {(location.pathname !== "/login" ) && (<Navbar />)}
+              {(location.pathname !== "/" ) && (<Navbar />)}
               <Routes>
-                <Route exact path="/login" element={<LoginPage />} />
+                <Route exact path="/" element={<LoginPage />} />
                 <Route
                   exact
-                  path="/"
+                  path="/home"
                   element={
-                    token ? (
+                    token !== undefined ? (
                       <Homepage />
                     ) : (
-                      <Navigate to={"/login"} />
+                      <Navigate to={"/"} />
                     )
                   }
                 />
@@ -34,10 +34,10 @@ function App() {
                   exact
                   path="/chat"
                   element={
-                    token ? (
+                    token !== undefined ? (
                       <ChatRoom />
                     ) : (
-                      <Navigate to={"/login"} />
+                      <Navigate to={"/"} />
                     )
                   }
                 />
@@ -45,10 +45,10 @@ function App() {
                   exact
                   path="/weather"
                   element={
-                    token ? (
+                    token !== undefined ? (
                       <WeatherRoom />
                     ) : (
-                      <Navigate to={"/login"} />
+                      <Navigate to={"/"} />
                     )
                   }
                 />

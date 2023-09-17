@@ -14,7 +14,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logOut();
-    navigate("/login");
+    navigate("/");
     setMobileMenu(false)
   };
   return (
@@ -28,7 +28,7 @@ const Navbar = () => {
             <X onClick={()=>setMobileMenu(false)} className="hover:cursor-pointer"/>
           </div>
         <div className="flex flex-col md:flex-row items-center justify-around w-1/2 h-1/2 p-2 m-2 text-lg font-semibold">
-          <Link to={"/"} onClick={()=>setMobileMenu(false)} className={`flex p-1 hover:-translate-y-1 duration-200 transition-all ${location.pathname === "/" && "text-sky-800"}`}>
+          <Link to={"/home"} onClick={()=>setMobileMenu(false)} className={`flex p-1 hover:-translate-y-1 duration-200 transition-all ${location.pathname === "/home" && "text-sky-800"}`}>
             Home
           </Link>
           <Link to={"/weather"} onClick={()=>setMobileMenu(false)} className={`flex p-1 hover:-translate-y-1 duration-200 transition-all ${location.pathname === "/weather" && "text-sky-800"}`}>
