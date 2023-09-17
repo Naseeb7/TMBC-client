@@ -35,7 +35,7 @@ export const UserState = (props) => {
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify(input),
     })
-    const data=await response.json()
+    const data=await response.json() //eslint-disable-line
     if(response.status === 201){
       setNotifications((prev) => [
         ...prev,
