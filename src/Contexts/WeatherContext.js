@@ -30,7 +30,6 @@ export const WeatherState = (props) => {
     const url = `${weatherUrl}/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
     setWeather(data);
   };
 
@@ -40,13 +39,11 @@ export const WeatherState = (props) => {
       const url = `${weatherUrl}/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`;
       const response = await fetch(url);
       const data = await response.json();
-      console.log(data);
       setCities(data);
       setLoading(false);
     } catch (error) {
       setError(true);
       setLoading(false);
-      console.log(error);
     }
   };
 

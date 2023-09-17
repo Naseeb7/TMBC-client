@@ -36,7 +36,6 @@ export const UserState = (props) => {
       body : JSON.stringify(input),
     })
     const data=await response.json()
-    console.log(data)
     if(response.status === 201){
       setNotifications((prev) => [
         ...prev,
@@ -59,7 +58,6 @@ export const UserState = (props) => {
       body : JSON.stringify(input),
     })
     const data=await response.json()
-    console.log(data)
     if(response.status===200){
     localStorage.setItem('token',data.token)
     localStorage.setItem('user',JSON.stringify(data.user))
