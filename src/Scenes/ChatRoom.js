@@ -49,7 +49,7 @@ const ChatRoom = () => {
           <div className="flex w-full justify-center items-center p-2">
             <Lottie
             animationData={loadingAnimation}
-            play
+            autoPlay
             loop
             className="w-1/4"
           />

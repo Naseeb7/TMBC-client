@@ -66,8 +66,7 @@ export const MessageState = (props) => {
           }),
         }
       );
-      // eslint-disable-next-line
-      const data = await response.json();
+      const data = await response.json(); // eslint-disable-line
     }
   };
 
@@ -111,6 +110,7 @@ export const MessageState = (props) => {
         socket.current.off("message-receive");
         socket.current.on("message-receive", (data) => {
           setMessageData(data)
+          console.log(data)
         });
 
         socket.current.off("typing-data");

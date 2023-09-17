@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const context = useContext(UserContext);
-  const { logOut, notifications, deleteNotification, user, token } = context;
+  const { logOut, notifications, deleteNotification, token, socket, user, setOnlineUsers } = context;
   const [mobileMenu, setMobileMenu]=useState(false)
   const navigate = useNavigate();
   const location = useLocation()
@@ -17,6 +17,21 @@ const Navbar = () => {
       navigate("/")
     }
 },[]) //eslint-disable-line
+
+useEffect(() => {
+  if (socket.current) {
+    socket.current.emit("add-user", user._id);
+  }
+}, []); // eslint-disable-line
+
+useEffect(() => {
+  if (socket.current) {
+    socket.current.on("online-users", (data) => {
+      // const exceptMe=data.filter((id)=> id !== user._id)
+      setOnlineUsers(data);
+    });
+  }
+}, []); // eslint-disable-line
 
   const handleLogout = () => {
     logOut();

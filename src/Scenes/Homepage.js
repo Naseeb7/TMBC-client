@@ -1,29 +1,10 @@
-import React, { useContext, useEffect } from "react";
-import { UserContext } from "../Contexts/UserContext";
+import React from "react";
 import chatAppAnimation from "../assets/chatAppAnimation.json";
 import weatherAppAnimation from "../assets/weatherAppAnimation.json";
 import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
 
 const Homepage = () => {
-  const context = useContext(UserContext);
-  const { token, socket, user, setOnlineUsers } = context;
-
-  useEffect(() => {
-    if (socket.current && token !== undefined) {
-      socket.current.emit("add-user", user._id);
-    }
-  }, []); // eslint-disable-line
-
-  useEffect(() => {
-    if (socket.current) {
-      socket.current.on("online-users", (data) => {
-        // const exceptMe=data.filter((id)=> id !== user._id)
-        setOnlineUsers(data);
-      });
-    }
-  }, []); // eslint-disable-line
-
   return (
     <div>
       <div className="flex flex-col items-center p-2 gap-8">

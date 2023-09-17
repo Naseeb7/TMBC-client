@@ -42,7 +42,7 @@ const handleX=()=>{
           <div className="flex w-full h-full justify-center items-center p-2">
           <Lottie
           animationData={loadingAnimation}
-          play
+          autoplay
           loop
           className="w-1/6"
         />
