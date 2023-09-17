@@ -26,7 +26,7 @@ export const UserState = (props) => {
         reconnectionAttempts: Infinity,
       });
     }
-  },[user])
+  },[]) //eslint-disable-line
 
   const registerUser =async (input) => {
     setLoading(true)
