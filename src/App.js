@@ -23,7 +23,7 @@ function App() {
                   exact
                   path="/"
                   element={
-                    token !== undefined ? (
+                    token ? (
                       <Homepage />
                     ) : (
                       <Navigate to={"/login"} />
@@ -34,7 +34,7 @@ function App() {
                   exact
                   path="/chat"
                   element={
-                    token !== undefined ? (
+                    token ? (
                       <ChatRoom />
                     ) : (
                       <Navigate to={"/login"} />
@@ -45,7 +45,7 @@ function App() {
                   exact
                   path="/weather"
                   element={
-                    token !== undefined ? (
+                    token ? (
                       <WeatherRoom />
                     ) : (
                       <Navigate to={"/login"} />
