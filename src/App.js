@@ -18,12 +18,16 @@ function App() {
             <WeatherState>
               {(location.pathname !== "/" ) && (<Navbar />)}
               <Routes>
-                <Route exact path="/" element={<LoginPage />} />
+                <Route exact path="/" element={token ? (
+                      <Navigate to={"/home"} />
+                    ) : (
+                       <LoginPage />
+                    )} />
                 <Route
                   exact
                   path="/home"
                   element={
-                    token !== undefined ? (
+                    token ? (
                       <Homepage />
                     ) : (
                       <Navigate to={"/"} />
@@ -34,7 +38,7 @@ function App() {
                   exact
                   path="/chat"
                   element={
-                    token !== undefined ? (
+                    token ? (
                       <ChatRoom />
                     ) : (
                       <Navigate to={"/"} />
@@ -45,7 +49,7 @@ function App() {
                   exact
                   path="/weather"
                   element={
-                    token !== undefined ? (
+                    token ? (
                       <WeatherRoom />
                     ) : (
                       <Navigate to={"/"} />

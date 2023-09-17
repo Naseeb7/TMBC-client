@@ -61,7 +61,7 @@ export const UserState = (props) => {
     if(response.status===200){
     localStorage.setItem('token',data.token)
     localStorage.setItem('user',JSON.stringify(data.user))
-    navigate('/')
+    navigate('/home')
     setNotifications((prev) => [
       ...prev,
       { reason: "Logged in successfully!", id: uuidv4() },

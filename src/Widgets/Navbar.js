@@ -1,16 +1,23 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../Contexts/UserContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Notifications from "./Notification";
 import TMBC from "../assets/TMBC.png";
 import { Menu, X } from "lucide-react";
+import { token } from "morgan";
 
 const Navbar = () => {
   const context = useContext(UserContext);
-  const { logOut, notifications, deleteNotification, user } = context;
+  const { logOut, notifications, deleteNotification, user, token } = context;
   const [mobileMenu, setMobileMenu]=useState(false)
   const navigate = useNavigate();
   const location = useLocation()
+
+  useEffect(()=>{
+    if(!localStorage.getItem("token")){
+      navigate("/")
+    }
+},[])
 
   const handleLogout = () => {
     logOut();
@@ -40,7 +47,7 @@ const Navbar = () => {
         </div>
         <div className="flex flex-col gap-1 w-full md:w-1/4 justify-center items-center h-1/4">
             <div className="flex w-full justify-center p-2 text-lg font-bold text-sky-800">
-              {user.firstName} {user.lastName}
+              {token && (<>{user.firstName} {user.lastName}</>)}
             </div>
           <button onClick={handleLogout} className="flex justify-center items-center w-1/2 p-1 rounded-xl bg-sky-950 hover:bg-sky-800 text-slate-300 duration-200 hover:text-sky-200">
             Log Out
