@@ -19,8 +19,10 @@ export const MessageState = (props) => {
   const [typingData, setTypingData] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("token");
+  const [chatLoading, setChatLoading]=useState(false)
 
   const getAllMessages = async (selectedUser) => {
+    setChatLoading(true)
     const response = await fetch(
       `${BaseUrl}/message/${user._id}/getallmessages`,
       {
@@ -37,6 +39,7 @@ export const MessageState = (props) => {
     );
     const data = await response.json();
     setMessages(data);
+    setChatLoading(false)
   };
 
   const sendMessage = async (message) => {
@@ -126,13 +129,12 @@ export const MessageState = (props) => {
 
   useEffect(() => {
     if (sentMessage) {
-      const msgs = [...messages];
-      msgs.push({
-        fromSelf: true,
-        message: sentMessage,
-        created: new Date().getTime(),
-      });
-      setMessages(msgs);
+      const msg={
+          fromSelf: true,
+          message: sentMessage,
+          created: new Date().getTime(),
+        }
+        setMessages((prev)=> [...prev, msg])
     }
   }, [sentMessage]); // eslint-disable-line
 
@@ -154,7 +156,8 @@ export const MessageState = (props) => {
         typing,
         setTyping,
         message,
-        setMessage
+        setMessage,
+        chatLoading
       }}
     >
       {props.children}

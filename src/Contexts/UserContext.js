@@ -13,6 +13,8 @@ export const UserState = (props) => {
   const [notifications, setNotifications] = useState([]);
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
+  const [loading, setLoading]=useState(false)
+  const [userLoading, setUserLoading]=useState(false)
   const socket=useRef()
   const navigate = useNavigate();
 
@@ -27,6 +29,7 @@ export const UserState = (props) => {
   },[user])
 
   const registerUser =async (input) => {
+    setLoading(true)
     const response=await fetch(`${BaseUrl}/auth/register`,{
       method: "POST",
       headers : {'Content-Type' : 'application/json'},
@@ -45,9 +48,11 @@ export const UserState = (props) => {
         { reason: "User already exists! Please login", id: uuidv4() },
       ]);
     }
+    setLoading(false)
   };
 
   const login =async (input) => {
+    setLoading(true)
     const response=await fetch(`${BaseUrl}/auth/login`,{
       method: "POST",
       headers : {'Content-Type' : 'application/json'},
@@ -69,6 +74,7 @@ export const UserState = (props) => {
         { reason: data.msg, id: uuidv4() },
       ]);
     }
+    setLoading(false)
   };
 
   const logOut=()=>{
@@ -81,6 +87,7 @@ export const UserState = (props) => {
   }
 
   const getAllUsers = async () => {
+    setUserLoading(true)
     const response = await fetch(`${BaseUrl}/users/${user._id}/getallusers`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
@@ -88,6 +95,7 @@ export const UserState = (props) => {
     const data = await response.json();
     const exceptMe=data.filter((obj)=>obj._id !== user._id)
     setAllUsers(exceptMe)
+    setUserLoading(false)
   };
 
   const deleteNotification = (id) => {
@@ -97,7 +105,7 @@ export const UserState = (props) => {
   };
 
   return (
-    <UserContext.Provider value={{ socket, user, token, registerUser, login, logOut, getAllUsers, notifications, setNotifications, deleteNotification, onlineUsers, setOnlineUsers, allUsers }}>
+    <UserContext.Provider value={{ socket, user, token, registerUser, login, logOut, getAllUsers, notifications, setNotifications, deleteNotification, onlineUsers, setOnlineUsers, allUsers, loading, userLoading }}>
       {props.children}
     </UserContext.Provider>
   )

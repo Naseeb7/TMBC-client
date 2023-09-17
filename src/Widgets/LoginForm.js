@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../Contexts/UserContext";
+import loadingAnimation from "../assets/loadinganimation.json";
+import Lottie from "lottie-react";
 
 const LoginForm = () => {
   const context = useContext(UserContext);
-  const { registerUser, login } = context;
+  const { registerUser, login, loading } = context;
   const [registerPage, setRegisterPage] = useState(false);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -39,10 +41,10 @@ const LoginForm = () => {
   const validateInputs = (inputs) => {
     let errors = {};
     if (registerPage) {
-      if (inputs.firstName.length < 5) {
+      if (inputs.firstName.length < 4) {
         errors.firstName = "First name is too short";
       }
-      if (inputs.lastName.length < 5) {
+      if (inputs.lastName.length < 4) {
         errors.lastName = "Last name is too short";
       }
       if (confirmPassword !== inputs.password) {
@@ -98,14 +100,14 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full gap-4 sm:w-1/3 p-2 rounded-2xl bg-sky-50 sm:h-4/5 overflow-hidden">
+    <div className="flex flex-col items-center w-full gap-4 md:w-1/3 p-2 rounded-2xl bg-sky-50 md:h-4/5 overflow-hidden">
       <div className="flex justify-center p-2 w-full">
-        <div className="flex relative justify-around items-center p-2 rounded-2xl bg-sky-900 w-3/4 sm:w-2/5 border z-10">
+        <div className="flex relative justify-around items-center p-2 rounded-2xl bg-sky-900 w-3/4 md:w-2/5 border z-10">
           <div
             className={`flex absolute w-2/5 h-2/3 rounded-xl bg-white ${
               registerPage
-                ? "translate-x-14 sm:translate-x-1/2"
-                : "left-4 sm:left-3"
+                ? "translate-x-14 md:translate-x-1/2"
+                : "left-4 md:left-3"
             } -z-10 transition-all duration-200`}
           ></div>
           <div
@@ -129,7 +131,9 @@ const LoginForm = () => {
       {registerPage ? (
         <form
           onSubmit={handleSubmit}
-          className={`flex flex-col gap-2 justify-center w-full p-2 ${registerPage ? "scale-x-100" : "sale-x-0"} origin-left duration-300`}
+          className={`flex flex-col gap-2 justify-center w-full p-2 ${
+            registerPage ? "scale-x-100" : "sale-x-0"
+          } origin-left duration-300`}
         >
           <div className="flex flex-col w-full p-2 relative">
             <label
@@ -251,16 +255,25 @@ const LoginForm = () => {
           <div className="flex w-full justify-center">
             <button
               type="submit"
-              className="flex justify-center items-center rounded-xl w-3/4 p-2 bg-sky-900 text-sky-300 hover:bg-sky-700 hover:text-sky-200 duration-200"
+              className="flex justify-center items-center rounded-xl w-3/4 p-2 bg-sky-900 text-slate-300 hover:bg-sky-700 hover:text-slate-200 duration-200 h-10"
             >
-              Submit
+              {loading ? (
+                <Lottie
+                animationData={loadingAnimation}
+                play
+                loop
+                className="w-1/6"
+              />
+              ) : (<>Submit</>)}
             </button>
           </div>
         </form>
       ) : (
         <form
           onSubmit={handleSubmit}
-          className={`flex flex-col gap-2 justify-center w-full h-4/5 ${registerPage ? "scale-x-0" : "scale-x-100"} origin-right duration-300`}
+          className={`flex flex-col gap-4 justify-center w-full h-4/5 ${
+            registerPage ? "scale-x-0" : "scale-x-100"
+          } origin-right duration-300`}
         >
           <div className="flex flex-col w-full p-2 relative">
             <label htmlFor="email" className="text-sky-900 text-lg font-medium">
@@ -308,11 +321,18 @@ const LoginForm = () => {
           </div>
 
           <div className="flex w-full justify-center">
-            <button
+          <button
               type="submit"
-              className="flex justify-center items-center rounded-xl w-3/4 p-2 bg-sky-900 text-sky-300 hover:bg-sky-700 hover:text-sky-200 duration-200"
+              className="flex justify-center items-center rounded-xl w-3/4 p-2 bg-sky-900 text-slate-300 hover:bg-sky-700 hover:text-slate-200 duration-200 h-10"
             >
-              Submit
+              {loading ? (
+                <Lottie
+                animationData={loadingAnimation}
+                play
+                loop
+                className="w-1/6"
+              />
+              ) : (<>Submit</>)}
             </button>
           </div>
         </form>
