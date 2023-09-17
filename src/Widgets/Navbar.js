@@ -22,7 +22,7 @@ useEffect(() => {
   if (socket.current) {
     socket.current.emit("add-user", user._id);
   }
-}, [socket.current]); // eslint-disable-line
+}, []); // eslint-disable-line
 
 useEffect(() => {
   if (socket.current) {
@@ -31,7 +31,7 @@ useEffect(() => {
       setOnlineUsers(data);
     });
   }
-}, [socket.current]); // eslint-disable-line
+}, []); // eslint-disable-line
 
   const handleLogout = () => {
     logOut();
