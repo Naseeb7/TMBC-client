@@ -4,7 +4,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Notifications from "./Notification";
 import TMBC from "../assets/TMBC.png";
 import { Menu, X } from "lucide-react";
-import { token } from "morgan";
 
 const Navbar = () => {
   const context = useContext(UserContext);
@@ -17,7 +16,7 @@ const Navbar = () => {
     if(!localStorage.getItem("token")){
       navigate("/")
     }
-},[])
+},[]) //eslint-disable-line
 
   const handleLogout = () => {
     logOut();
