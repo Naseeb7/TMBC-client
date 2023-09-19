@@ -1,6 +1,5 @@
-import { createContext, useEffect, useRef, useState } from "react"
+import { createContext, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 
 const BaseUrl=process.env.REACT_APP_BASE_URL
@@ -17,16 +16,6 @@ export const UserState = (props) => {
   const [userLoading, setUserLoading]=useState(false)
   const socket=useRef()
   const navigate = useNavigate();
-
-  useEffect(()=>{
-    if(user){
-      socket.current = io(BaseUrl, {
-        reconnection: true,
-        reconnectionDelay: 500,
-        reconnectionAttempts: Infinity,
-      });
-    }
-  },[]) //eslint-disable-line
 
   const registerUser =async (input) => {
     setLoading(true)

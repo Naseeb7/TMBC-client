@@ -71,13 +71,13 @@ const LoginForm = () => {
     }
   };
 
-  const finishSubmit = () => {
+  const finishSubmit =async () => {
     if (registerPage) {
-      registerUser(registerInputs);
+      await registerUser(registerInputs);
       setRegisterPage(false);
       setRegisterInputs(initialValueRegister);
     } else {
-      login(loginInputs);
+      await login(loginInputs);
       setLoginInputs(initialValueLogin);
     }
   };

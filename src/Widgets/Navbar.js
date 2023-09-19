@@ -4,6 +4,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Notifications from "./Notification";
 import TMBC from "../assets/TMBC.png";
 import { Menu, X } from "lucide-react";
+import { io } from "socket.io-client";
+
+const BaseUrl=process.env.REACT_APP_BASE_URL
 
 const Navbar = () => {
   const context = useContext(UserContext);
@@ -18,6 +21,16 @@ const Navbar = () => {
     }
 },[]) //eslint-disable-line
 
+useEffect(()=>{
+  if(localStorage.getItem("token")){
+    socket.current = io(BaseUrl, {
+      reconnection: true,
+      reconnectionDelay: 500,
+      reconnectionAttempts: Infinity,
+    });
+  }
+},[]) //eslint-disable-line
+
 useEffect(() => {
   if (socket.current) {
     socket.current.emit("add-user", user._id);
@@ -26,6 +39,7 @@ useEffect(() => {
 
 useEffect(() => {
   if (socket.current) {
+    socket.current.off("online-users")
     socket.current.on("online-users", (data) => {
       // const exceptMe=data.filter((id)=> id !== user._id)
       setOnlineUsers(data);

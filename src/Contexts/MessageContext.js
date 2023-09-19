@@ -11,7 +11,6 @@ export const MessageState = (props) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage]=useState("")
   const [messageFrom, setMessageFrom] = useState([]);
-  const [sentMessage, setSentMessage] = useState(null);
   const [messageData, setMessageData] = useState(null);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [currentSelected, setCurrentSelected] = useState(null);
@@ -44,13 +43,20 @@ export const MessageState = (props) => {
 
   const sendMessage = async (message) => {
     if (message !== "") {
+      const msg={
+        fromSelf: true,
+        message: message,
+        created: new Date().getTime(),
+      }
+      setMessages((prev)=>{
+        return [...prev, msg]
+      })
       socket.current.off("send-message");
       socket.current.emit("send-message", {
         from: user._id,
         to: currentSelected._id,
         message: message,
       });
-      setSentMessage(message);
       const response = await fetch(
         `${BaseUrl}/message/${user._id}/addmessage`,
         {
@@ -110,7 +116,6 @@ export const MessageState = (props) => {
         socket.current.off("message-receive");
         socket.current.on("message-receive", (data) => {
           setMessageData(data)
-          console.log(data)
         });
 
         socket.current.off("typing-data");
@@ -119,7 +124,7 @@ export const MessageState = (props) => {
         });
     }
     setMessage("")
-  }, [currentSelected]); //eslint-disable-line
+  }, []); //eslint-disable-line
 
   useEffect(() => {
     if (arrivalMessage) {
@@ -127,16 +132,18 @@ export const MessageState = (props) => {
     }
   }, [arrivalMessage]); // eslint-disable-line
 
-  useEffect(() => {
-    if (sentMessage) {
-      const msg={
-          fromSelf: true,
-          message: sentMessage,
-          created: new Date().getTime(),
-        }
-        setMessages((prev)=> [...prev, msg])
-    }
-  }, [sentMessage]); // eslint-disable-line
+  // useEffect(() => {
+  //   if (sentMessage !== "") {
+  //     const msg={
+  //         fromSelf: true,
+  //         message: sentMessage,
+  //         created: new Date().getTime(),
+  //       }
+  //       setMessages((prev)=>{
+  //         return [...prev, msg]
+  //       })
+  //   }
+  // }, [sentMessage]); // eslint-disable-line
 
   return (
     <MessageContext.Provider
@@ -145,8 +152,6 @@ export const MessageState = (props) => {
         setMessages,
         getAllMessages,
         sendMessage,
-        sentMessage,
-        setSentMessage,
         arrivalMessage,
         setArrivalMessage,
         messageFrom,
