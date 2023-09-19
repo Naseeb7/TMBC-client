@@ -77,7 +77,7 @@ export const MessageState = (props) => {
   };
 
   const updateMessage=(data)=>{
-    if (data.from === currentSelected._id) {
+    if (currentSelected && (data.from === currentSelected._id)) {
       setArrivalMessage({
         fromSelf: false,
         message: data.message,
@@ -97,7 +97,7 @@ export const MessageState = (props) => {
   },[messageData]) // eslint-disable-line
 
   const updateTyping=(data)=>{
-    if (data.from === currentSelected._id) {
+    if (currentSelected && (data.from === currentSelected._id)) {
       setTyping(data.typing);
             setTimeout(() => {
               setTyping(false);
